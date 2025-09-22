@@ -8,7 +8,8 @@ private:
     const int row = 9;
     int grid[9][9];
 
-    bool check_constraint(int row, int col, int value) const{
+    bool check_constraint(int row, int col, int value) const
+    {
         // Check the row
         for (int j = 0; j < 9; j++)
         {
@@ -38,13 +39,9 @@ private:
         return true;
     };
 
-
-    
-
-
-
 public:
-    CSP_sudoku(){
+    CSP_sudoku()
+    {
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -53,7 +50,6 @@ public:
             }
         }
     };
-
 
     void set_value(int row, int col, int value)
     {
@@ -70,7 +66,7 @@ public:
         {
             for (int j = 0; j < 9; j++)
             {
-                std::cout <<grid[i][j] << " ";
+                std::cout << grid[i][j] << " ";
             }
             std::cout << std::endl;
         }
@@ -101,31 +97,35 @@ public:
         }
     }
 
-      void solve() {
+    bool solve()
+    {
         // Iterate over every cell
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (grid[i][j] == 0) {  // Find an empty cell
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (grid[i][j] == 0)
+                { // Find an empty cell
                     // Try numbers from 1 to 9
-                    for (int val = 1; val <= 9; val++) {
-                        if (check_constraint(i, j, val)) {  // If placing num is valid
-                            set_value(i, j, val);  // Place the number
-                            solve();  // Recursively solve the next empty cell
-                            set_value(i, j, 0);  // Backtrack: reset the cell
+                    for (int val = 1; val <= 9; val++)
+                    {
+                        if (check_constraint(i, j, val))
+                        {                         // If placing num is valid
+                            set_value(i, j, val); // Place the number
+                            if (solve())          // Recursively solve the next empty cell
+                                return true;
+                            set_value(i, j, 0); // Backtrack: reset the cell
                         }
                     }
-                    return;  // Once a valid number is placed, exit (like Python’s return)
+                    return false; // Once a valid number is placed, exit (like Python’s return)
                 }
             }
         }
 
-        // If no empty cells are left, print the solved grid
-        display_grid();
+        return true;
     }
 
-   ~CSP_sudoku(){
-       // Destructor logic (if needed)
-   };
-
-
+    ~CSP_sudoku() {
+        // Destructor logic (if needed)
+    };
 };
